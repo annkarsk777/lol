@@ -17,8 +17,8 @@ class MoviesController extends AbstractController
         $dbh = Db::getDbh();
         $stmt = $dbh->prepare($sql);
         $stmt->execute();
-        $minBudget = $stmt->fetchAll();
-        return $minBudget;
+        $result = $stmt->fetch(\PDO::FETCH_NUM);
+        return $result ? $result[0] : null;
     }
 
     public function getMaxBudget()
@@ -30,8 +30,8 @@ class MoviesController extends AbstractController
         $dbh = Db::getDbh();
         $stmt = $dbh->prepare($sql);
         $stmt->execute();
-        $maxBudget = $stmt->fetchAll();
-        return $maxBudget;
+        $result = $stmt->fetch(\PDO::FETCH_NUM);
+        return $result ? $result[0] : null;
 
     }
     public function getCurrentMaxBudget()
