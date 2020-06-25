@@ -1,0 +1,36 @@
+<?php /** @var \App\Controller\ActorsController $controller */?>
+<menu class="nav">
+    <li>
+        <a href="/">Back to movies</a>
+    </li>
+</menu>
+<div class="content">
+    <table id="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date of birth</th>
+        </tr>
+        </thead>
+        <tbody id="actors-list"></tbody>
+        <script type="application/ecmascript">
+            $(function () {
+                $('#actors-list').actorsList({
+                    url: '/actorsList'
+                });
+            })
+        </script>
+
+    </table>
+    </table>
+</div>
+
+<form id="actors-filter" action="/">
+    <select class='select' name='country_id'>
+        <option value="">Select a actor country:</option>
+        <?php foreach ($controller->getCountries() as $country) : ?>
+            <option value="<?= $country['country_id'] ?>"><?= $country['country_name']?></option>';
+        <?php endforeach; ?>
+    </select>
+</form>

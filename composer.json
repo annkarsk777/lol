@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php-di/php-di": "^6.1",
+        "ext-pdo": "*",
+      "ext-json": "*"
+    },
+    "autoload": {
+        "classmap": [
+            "app/"
+        ],
+        "psr-4": {"App\\": "app/"}
+    }
+}

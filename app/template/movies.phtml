@@ -1,0 +1,50 @@
+<?php /** @var \App\Controller\MoviesController $controller */ ?>
+<menu class="nav">
+    <li>
+        <a href="/">Home Page</a>
+    </li>
+    <li>
+        <a href="/actors/">Actors</a>
+    </li>
+</menu>
+<div class="content">
+    <table id="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Duration</th>
+            <th>Budget</th>
+            <th>Producer id</th>
+        </tr>
+        </thead>
+        <tbody id="movies-list"></tbody>
+        <script type="application/ecmascript">
+            $(function () {
+                $('#movies-list').moviesList({
+                    url: '/moviesList'
+                });
+            })
+        </script>
+    </table>
+</div>
+<form id="movie-filters" action="/">
+    <select class='select' name='producer_id'>
+        <option value="">Select a producer:</option>
+        <?php foreach ($controller->getProducers() as $producer) : ?>
+            <option value="<?= $producer['producer_id'] ?>"><?= $producer['producer_name'] ?></option>';
+        <?php endforeach; ?>
+    </select>
+
+    <hr>
+
+
+</form>
+<div id="slider"></div>
+<br/>
+Range: <span id='range'></span>
+
+
+
+
