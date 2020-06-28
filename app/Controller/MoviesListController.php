@@ -13,28 +13,29 @@ class MoviesListController extends AbstractController
 {
     public function execute()
     {
-//        $currentMinBudget = $this->getCurrentMinBudget();
-//        $sql = <<<SQL
-//        select *
-//        from movies
-//            join producers as p on  p.producer_id = movies.producer_id
-//            WHERE m.budget >= :current_min_budget AND m.budget <=
-//        SQL;
-
         $sql = <<<SQL
         SELECT *
         FROM movies
             INNER JOIN producers AS p ON p.producer_id = movies.producer_id
+            WHERE
         SQL;
 
         if ($producerId = $this->getProducerId()) {
-            $sql .= ' WHERE p.producer_id = :producerId;';
+            $sql .= ' p.producer_id = :producerId';
+        }
+        if ($minBudget = $this->getMinValue()) {
+            $sql .= ' AND budget >= :min_budget';
+        }
+        if ($maxBudget = $this->getMaxValue()) {
+            $sql .= ' AND budget <= :max_budget;';
         }
 
 
         $dbh = Db::getDbh();
         $stmt = $dbh->prepare($sql);
         $stmt->bindValue(':producerId', $producerId, \PDO::PARAM_INT);
+        $stmt->bindValue(':min_budget', $minBudget, \PDO::PARAM_INT);
+        $stmt->bindValue(':max_budget', $maxBudget, \PDO::PARAM_INT);
 
         $stmt->execute();
         $movies = $stmt->fetchAll();
@@ -52,23 +53,17 @@ class MoviesListController extends AbstractController
             : 0;
     }
 
-//    public function findAllMovies(int $producerId = 0)
-//    {
-//        $sql = <<<SQL
-//        select *
-//        from movies
-//            join producers as p on  p.producer_id = movies.movies_id
-//        SQL;
-//
-//        if ($producerId) {
-//            $sql .= 'where p.producer_id = :producerId;';
-//        }
-//
-//        $dbh = Db::getDbh();
-//        $stmt = $dbh->prepare($sql);
-//        $stmt->bindValue(':producerId', $producerId, \PDO::PARAM_INT);
-//
-//        $stmt->execute();
-//        return $stmt->fetchAll(\PDO::FETCH_CLASS, \App\Models\ProducerFilter::class);
-//    }
+    public function getMinValue(): int
+    {
+        return isset($_REQUEST['min_budget'])
+            ? (int) $_REQUEST['min_budget']
+            : 0;
+    }
+
+    public function getMaxValue(): int
+    {
+        return isset($_REQUEST['max_budget'])
+            ? (int) $_REQUEST['max_budget']
+            : 0;
+    }
 }

@@ -14,11 +14,6 @@ class MoviesController extends AbstractController
          select MIN(budget)
          from movies
         SQL;
-
-        if ($budget = $this->getMinBudgetValue()) {
-            $sql .= ' WHERE budget >= :min_budget;';
-        }
-
         $dbh = Db::getDbh();
         $stmt = $dbh->prepare($sql);
         $stmt->execute();
@@ -32,17 +27,11 @@ class MoviesController extends AbstractController
          select MAX(budget)
          from movies
         SQL;
-
-        if ($budget = $this->getMaxBudgetValue()) {
-            $sql .= ' WHERE budget <= :max_budget;';
-        }
-
         $dbh = Db::getDbh();
         $stmt = $dbh->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_NUM);
         return $result ? $result[0] : null;
-
     }
 
     public function execute()
@@ -58,25 +47,5 @@ class MoviesController extends AbstractController
         $db = \App\Models\Db::getDbh()->prepare('SELECT * FROM producers');
         $db->execute();
         return $db->fetchAll();
-    }
-
-    /**
-     * @return int
-     */
-    public function getMinBudgetValue(): int
-    {
-        return isset($_REQUEST['min_budget'])
-            ? (int) $_REQUEST['min_budget']
-            : 0;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxBudgetValue(): int
-    {
-        return isset($_REQUEST['max_budget'])
-            ? (int) $_REQUEST['max_budget']
-            : 0;
     }
 }
